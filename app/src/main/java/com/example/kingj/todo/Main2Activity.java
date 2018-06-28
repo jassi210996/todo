@@ -30,9 +30,9 @@ public class Main2Activity extends AppCompatActivity {
          duedate = intent.getStringExtra(MainActivity.date_k);
          discription="abc";
 
-        TextView textView = findViewById(R.id.tv1);
+        TextView textView = findViewById(R.id.etv1);
         textView.setText(taskname + "");
-        TextView textView1 = findViewById(R.id.tv2);
+        TextView textView1 = findViewById(R.id.etv2);
         textView1.setText(duedate + "");
 
 
@@ -79,9 +79,9 @@ public class Main2Activity extends AppCompatActivity {
                 String dateString = data.getStringExtra(Main4Activity.DATE_KEY);
                 String discriptionString = data.getStringExtra(Main4Activity.DIS_KEY);
 //                int amount = Integer.parseInt(amountString);
-                TextView textView = findViewById(R.id.tv1);
+                TextView textView = findViewById(R.id.etv1);
                 textView.setText(title + "");
-                TextView textView1 = findViewById(R.id.tv2);
+                TextView textView1 = findViewById(R.id.etv2);
                 textView1.setText(dateString + "");
                 TextView textView2=findViewById(R.id.tv3);
                 textView2.setText(discriptionString + "");

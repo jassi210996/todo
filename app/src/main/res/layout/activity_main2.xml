@@ -20,7 +20,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="50dp"/>
     <TextView
-        android:id="@+id/tv1"
+        android:id="@+id/etv1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"/>
@@ -31,7 +31,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="30dp"/>
     <TextView
-        android:id="@+id/tv2"
+        android:id="@+id/etv2"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
@@ -42,7 +42,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"/>
     <TextView
-        android:id="@+id/tv3"
+        android:id="@+id/etv3"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="20dp"/>
