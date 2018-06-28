@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
+    tools:context=".Main2Activity"
+    >
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Task Name"
+            android:textSize="30dp"
+            android:layout_height="50dp"
+            />
+        <EditText
+            android:id="@+id/et1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"/>
+        <TextView
+            android:text="Due Date"
+            android:textSize="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"/>
+        <EditText
+            android:id="@+id/et2"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+        <TextView
+            android:text="Task Discription"
+            android:textSize="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"/>
+        <EditText
+            android:id="@+id/et3"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/drawable_bg"
+        android:id="@+id/bt"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="Save"
+        android:textSize="40dp"/>
+</LinearLayout>

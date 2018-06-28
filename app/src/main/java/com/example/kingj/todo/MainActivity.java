@@ -3,9 +3,11 @@ package com.example.kingj.todo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ListView listView;
     public static String task_k="task";
     public static String date_k = "date";
+    public static int request_code=1;
+    public static int result_code=2;
 
 
     @Override
@@ -35,11 +39,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         listView=findViewById(R.id.listview);
 
 
-        for (int i = 0; i < 5; i++)
-        {
-            Task task= new Task("Task " + i,i+"/10/2018");
-            tasks.add(task);
-        }
+//        for (int i = 0; i < 5; i++)
+//        {
+//            Task task= new Task("Task " + i,i+"/10/2018");
+//            tasks.add(task);
+//        }
 
 
         adapter=new TaskAdapter(this,tasks);
@@ -63,52 +67,37 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int id= item.getItemId();
         if(id==R.id.addnew)
         {
+            Bundle bundle=new Bundle();
+            bundle.putString("task","abc");
+            bundle.putString("date","2/08/2018");
 
-            final int count = tasks.size();
-
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setTitle("Add New task");
-            LinearLayout linearLayout= new LinearLayout(this);
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-            final EditText et1 = new EditText(this);
-            final EditText et2 = new EditText(this);
-
-            et1.setHint("Enter task name");
-            et2.setHint("Enter due date");
-
-            linearLayout.addView(et1);
-            linearLayout.addView(et2);
-
-            builder.setView(linearLayout);
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+            Intent intent = new Intent(this,Main3Activity.class);
+            intent.putExtras(bundle);
+            startActivityForResult(intent,request_code);
 
 
-                }
-            });
 
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    String nm=et1.getText().toString();
-                    String dd = et2.getText().toString();
-
-                    Task task = new Task(nm,dd);
-                    tasks.add(count,task);
-//                    tasks.add(task);
-
-
-                }
-            });
-//            builder.setView();
-
-            AlertDialog dialog=builder.create();
-            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("MainActivity","Activity Result called");
+        if(requestCode == requestCode){
+            if(resultCode == Main3Activity.result_code){
+                String title = data.getStringExtra(Main3Activity.TITLE_KEY);
+                String dateString = data.getStringExtra(Main3Activity.DATE_KEY);
+//                int amount = Integer.parseInt(amountString);
+                Task task = new Task(title,dateString);
+                tasks.add(task);
+                adapter.notifyDataSetChanged();
+            }
+        }
+
     }
 
     @Override

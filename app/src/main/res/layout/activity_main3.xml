@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Main3Activity">
+
+    <EditText
+        android:id="@+id/et1"
+        android:layout_marginTop="100dp"
+        android:hint="Task Title"
+        android:background="@drawable/drawable_bg"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        />
+
+    <EditText
+        android:id="@+id/et2"
+        android:layout_marginTop="20dp"
+        android:hint="Due Date"
+        android:background="@drawable/drawable_bg"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        />
+
+    <Button
+        android:id="@+id/bt"
+        android:layout_marginTop="20dp"
+        android:text="Add Task"
+        android:textSize="30dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/drawable_bg"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+</LinearLayout>
