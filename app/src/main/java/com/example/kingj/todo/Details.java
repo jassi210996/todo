@@ -4,20 +4,27 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.util.zip.Inflater;
-
-public class Main2Activity extends AppCompatActivity {
+public class Details extends AppCompatActivity {
 
     String taskname;
     String duedate;
     String discription;
-    public static final int request_code=4;
+    long id;
+    int position;
+
+
+    public static final int Result_code_for_edit=4;
+    public static final int request_code_for_edit=4;
+
+    public static final String position_k="podition";
     public static final String task_k="title";
     public static final String date_k="date";
+    public static final String id_k ="id";
     public static final String discription_k="discription";
 
     @Override
@@ -26,8 +33,14 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         Intent intent = getIntent();
+
          taskname = intent.getStringExtra(MainActivity.task_k);
          duedate = intent.getStringExtra(MainActivity.date_k);
+         position=intent.getIntExtra(MainActivity.position_k,1);
+         id=intent.getIntExtra(MainActivity.id_k,1);
+
+        Log.d("Details","Position = " +position);
+
          discription="abc";
 
         TextView textView = findViewById(R.id.etv1);
@@ -59,9 +72,9 @@ public class Main2Activity extends AppCompatActivity {
             bundle.putString(discription_k,discription);
 
 
-            Intent intent = new Intent(this,Main4Activity.class);
+            Intent intent = new Intent(this,Edit.class);
             intent.putExtras(bundle);
-            startActivityForResult(intent,request_code);
+            startActivityForResult(intent,request_code_for_edit);
         }
 
         return super.onOptionsItemSelected(item);
@@ -71,21 +84,32 @@ public class Main2Activity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==requestCode)
+        if(request_code_for_edit==requestCode)
         {
-            if(resultCode==Main4Activity.result_code)
+            if(resultCode== Edit.result_code)
             {
-                String title = data.getStringExtra(Main4Activity.TITLE_KEY);
-                String dateString = data.getStringExtra(Main4Activity.DATE_KEY);
-                String discriptionString = data.getStringExtra(Main4Activity.DIS_KEY);
+                String title = data.getStringExtra(Edit.TITLE_KEY);
+                String dateString = data.getStringExtra(Edit.DATE_KEY);
+                String discriptionString = data.getStringExtra(Edit.DIS_KEY);
+                String p =String.valueOf(position);
 //                int amount = Integer.parseInt(amountString);
+
                 TextView textView = findViewById(R.id.etv1);
                 textView.setText(title + "");
                 TextView textView1 = findViewById(R.id.etv2);
                 textView1.setText(dateString + "");
-                TextView textView2=findViewById(R.id.tv3);
+                TextView textView2=findViewById(R.id.etv3);
                 textView2.setText(discriptionString + "");
 
+                Log.d("Details","Position = " +p);
+
+                data.putExtra(position_k,p);
+                data.putExtra(task_k,title);
+                data.putExtra(date_k,dateString);
+                data.putExtra(id_k,id);
+
+                setResult(request_code_for_edit, data);
+                finish();
                // Task task = new Task(title,dateString);
             }
         }
