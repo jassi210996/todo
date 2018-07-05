@@ -1,11 +1,14 @@
 package com.example.kingj.todo;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.AlarmClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,8 +28,20 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     public static int result_code=2;
     public static String TITLE_KEY="TASK TITLE";
     public static String DATE_KEY="DUE DATE";
+    public static String CDATE_KEY="DUE DATE";
+    public static String CMONTH_KEY="DUE DATE";
+    public static String CHOUR_KEY="DUE DATE";
+    public static String CMIN_KEY="DUE DATE";
+    public static String CYEAR_KEY="DUE DATE";
+
 
     String title,date,descrip,time;
+    int hour;
+    int min;
+    int month;
+    int day;
+    int year;
+
 
     EditText et1;
     EditText etdate;
@@ -62,6 +77,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 setTime();
             }
         });
+
 
 
 //        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -114,9 +130,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     {
         Calendar calendar =Calendar.getInstance();
 
-        int day = calendar.get(Calendar.DATE);
-        final int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
+        day = calendar.get(Calendar.DATE);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -134,14 +150,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     public void setTime()
     {
         Calendar calendar = Calendar.getInstance();
-        int hour =calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
+         hour =calendar.get(Calendar.HOUR_OF_DAY);
+         min = calendar.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, new OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int min) {
 
                 time = hour + ":" + min;
+
                 ettime.setText(time);
 
             }
@@ -157,31 +174,56 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
          title =et1.getText().toString();
          date = etdate.getText().toString();
 
-         if(intent.getAction().equals(Intent.ACTION_SEND)){
+         if(intent!=null) {
 
-             //int amount = Integer.parseInt(amountString);
-             Task task1 = new Task(title, date);
+             if (intent.getAction().equals(Intent.ACTION_SEND)) {
+
+                 //int amount = Integer.parseInt(amountString);
+                 Task task1 = new Task(title, date);
 
 
-             TaskOpenHolder openHolder1 = TaskOpenHolder.getHolder(getApplicationContext());
-             SQLiteDatabase database1 = openHolder1.getWritableDatabase();
+                 TaskOpenHolder openHolder1 = TaskOpenHolder.getHolder(getApplicationContext());
+                 SQLiteDatabase database1 = openHolder1.getWritableDatabase();
 
-             ContentValues contentValues = new ContentValues();
+                 ContentValues contentValues = new ContentValues();
 
-             contentValues.put(Contract.Tasks.COLUMN_TITLE, task1.getTask());
-             contentValues.put(Contract.Tasks.DUE_DATE, task1.getDuedate());
+                 contentValues.put(Contract.Tasks.COLUMN_TITLE, task1.getTask());
+                 contentValues.put(Contract.Tasks.DUE_DATE, task1.getDuedate());
 
-             long id1 = database1.insert(Contract.Tasks.TABLE_NAME, null, contentValues);
+                 long id1 = database1.insert(Contract.Tasks.TABLE_NAME, null, contentValues);
 
-             task1.setId(id1);
+                 task1.setId(id1);
 
+                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+                 Intent intent = new Intent(this, MyReceiver.class);
+                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+                 Calendar calendar = Calendar.getInstance();
+//        calendar.set(2018,8,2);
+                 calendar.set(year, month, day, hour, min);
+
+                 long alarmTime = calendar.getTimeInMillis();
+
+                 long currentTime = System.currentTimeMillis();
+                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,currentTime+alarmTime,pendingIntent);
+//                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentTime+alarmTime/*currentTime + 5000*/,
+//                         10000, pendingIntent);
+             }
          }
          else
          {
              Intent intent = new Intent();
              intent.putExtra(TITLE_KEY,title);
              intent.putExtra(DATE_KEY,date);
+             intent.putExtra(CHOUR_KEY,hour);
+             intent.putExtra(CDATE_KEY,day);
+             intent.putExtra(CMONTH_KEY,month);
+             intent.putExtra(CMIN_KEY,min);
+             intent.putExtra(CYEAR_KEY,year);
+
              setResult(result_code,intent);
+
          }
 
 

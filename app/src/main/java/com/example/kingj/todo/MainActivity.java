@@ -1,5 +1,7 @@
 package com.example.kingj.todo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -123,7 +126,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 String title1 = data.getStringExtra(AddActivity.TITLE_KEY);
                 String dateString = data.getStringExtra(AddActivity.DATE_KEY);
-
+                int year  = data.getIntExtra(AddActivity.CYEAR_KEY,1);
+                int month  = data.getIntExtra(AddActivity.CMONTH_KEY,1);
+                int min  = data.getIntExtra(AddActivity.CMIN_KEY,1);
+                int day  = data.getIntExtra(AddActivity.CDATE_KEY,1);
+                int hour  = data.getIntExtra(AddActivity.CHOUR_KEY,1);
 
                 //int amount = Integer.parseInt(amountString);
                 Task task1 = new Task(title1, dateString);
@@ -144,6 +151,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 tasks.add(task1);
 
                 adapter.notifyDataSetChanged();
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+                Intent intent = new Intent(this,MyReceiver.class);
+                PendingIntent pendingIntent =  PendingIntent.getBroadcast(this,1,intent,0);
+
+                Calendar calendar = Calendar.getInstance();
+                //        calendar.set(2018,8,2);
+                calendar.set(year,month,day,hour,min);
+
+
+                long currentTime = System.currentTimeMillis();
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()/*currentTime + 5000*/,
+                        10000,pendingIntent);
 
 
             }

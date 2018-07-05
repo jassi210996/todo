@@ -30,4 +30,11 @@ tools:context=".MainActivity">
     android:paddingLeft="10dp"
     android:background="@drawable/drawable_bg"/>
 
+    <Button
+        android:text="Delete"
+        android:focusable="false"
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
