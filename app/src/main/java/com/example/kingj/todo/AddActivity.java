@@ -28,19 +28,19 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     public static int result_code=2;
     public static String TITLE_KEY="TASK TITLE";
     public static String DATE_KEY="DUE DATE";
-    public static String CDATE_KEY="DUE DATE";
-    public static String CMONTH_KEY="DUE DATE";
-    public static String CHOUR_KEY="DUE DATE";
-    public static String CMIN_KEY="DUE DATE";
-    public static String CYEAR_KEY="DUE DATE";
+    public static String CDATE_KEY="DUE DATE1";
+    public static String CMONTH_KEY="DUE DATE2";
+    public static String CHOUR_KEY="DUE DATE3";
+    public static String CMIN_KEY="DUE DATE4";
+    public static String CYEAR_KEY="DUE DATE5";
 
 
     String title,date,descrip,time;
-    int hour;
-    int min;
-    int month;
-    int day;
-    int year;
+    public int hour;
+    public int min;
+    public int month;
+    public int day;
+    public int year;
 
 
     EditText et1;
@@ -99,14 +99,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
                     if (title!=null)
                     {
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                        String date = sdf.format(new Date());
-
-                        sdf = new SimpleDateFormat("HH:mm");
-                        String str = sdf.format(new Date());
+//                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                        String date = sdf.format(new Date());
+//
+//                        sdf = new SimpleDateFormat("HH:mm");
+//                        String str = sdf.format(new Date());
                         et1.setText(title);
-                        ettime.setText(str);
-                        etdate.setText(date);
+//                        ettime.setText(str);
+//                        etdate.setText(date);
                     }
                 }
 
@@ -136,9 +136,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            public void onDateSet(DatePicker datePicker, int yearIn, int monthOfyear, int dayOfmonth) {
 
                 ++month;
+
+                year=yearIn;
+                month=monthOfyear;
+                day=dayOfmonth;
+
                 date = day + "/" + month + "/" + year;
                 etdate.setText(date);
             }
@@ -155,9 +160,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, new OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int min) {
-
-                time = hour + ":" + min;
+            public void onTimeSet(TimePicker timePicker, int hourOfday, int minOfHour) {
+                hour = hourOfday;
+                min=minOfHour;
+                time = hourOfday + ":" + minOfHour;
 
                 ettime.setText(time);
 
@@ -174,9 +180,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
          title =et1.getText().toString();
          date = etdate.getText().toString();
 
-         if(intent!=null) {
 
-             if (intent.getAction().equals(Intent.ACTION_SEND)) {
+             if (intent.getAction()!=null && intent.getAction().equals(Intent.ACTION_SEND)) {
 
                  //int amount = Integer.parseInt(amountString);
                  Task task1 = new Task(title, date);
@@ -197,22 +202,34 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                  AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
                  Intent intent = new Intent(this, MyReceiver.class);
-                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)id1, intent, 0);
 
                  Calendar calendar = Calendar.getInstance();
 //        calendar.set(2018,8,2);
+
+
                  calendar.set(year, month, day, hour, min);
+
+                 Log.d("AddActivitq"," = =" + result_code +"=" + date +"=" + hour + "=" +min);
+
 
                  long alarmTime = calendar.getTimeInMillis();
 
                  long currentTime = System.currentTimeMillis();
-                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,currentTime+alarmTime,pendingIntent);
+
+
+                 alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis()/*currentTime + 5000*/,pendingIntent);
+
 //                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currentTime+alarmTime/*currentTime + 5000*/,
 //                         10000, pendingIntent);
+
+                finish();
+
              }
-         }
          else
          {
+
+             Log.d("AddActivitq"," = =" + result_code +"=" + date +"=" + hour + "=" +month);
              Intent intent = new Intent();
              intent.putExtra(TITLE_KEY,title);
              intent.putExtra(DATE_KEY,date);
@@ -223,11 +240,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
              intent.putExtra(CYEAR_KEY,year);
 
              setResult(result_code,intent);
+             finish();
 
          }
 
 
-        finish();
 
     }
 }

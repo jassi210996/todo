@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<Task> tasks=new ArrayList<>();
     TaskAdapter adapter;
     ListView listView;
+
 
     public static String task_k="task";
     public static String date_k = "date";
@@ -79,7 +81,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //        }
 
 
-        adapter=new TaskAdapter(this,tasks);
+        adapter=new TaskAdapter(getApplicationContext(), tasks, new MyButton() {
+            @Override
+            public void rowButton(View view, int position) {
+
+            }
+        });
 
         listView.setAdapter(adapter);
 
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d("MainActivity","Activity Result called");
+        Log.d("MainqActivity","Activity Result called = " + resultCode + "rq" + requestCode  );
         if(requestCode == 1){
             if(resultCode == AddActivity.result_code){
 
@@ -131,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 int min  = data.getIntExtra(AddActivity.CMIN_KEY,1);
                 int day  = data.getIntExtra(AddActivity.CDATE_KEY,1);
                 int hour  = data.getIntExtra(AddActivity.CHOUR_KEY,1);
+
+                Log.d("MainqActivity"," = =" + result_code +"=" + dateString +"=" + hour + "=" +month);
+
 
                 //int amount = Integer.parseInt(amountString);
                 Task task1 = new Task(title1, dateString);
